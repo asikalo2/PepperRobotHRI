@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Ciao!</title>
+
+  <style>
+
+    body {
+      /*background-color: #fff;*/
+      background-image: url('robot.jpg');
+      font-family: sans-serif;
+    }
+
+    h1 {
+      font-weight: normal;
+      font-size: 300%;
+    }
+
+    input[type=button] {
+      background-image: url('robot.jpg');
+    /*  background-color: #A01010;*/
+      border: none;
+      border-radius: 8px;
+      /*color: white;*/
+      padding: 14px 24px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 24px;
+      margin: 10px 10px 10px 10px;
+    }
+  </style>
+</hea
+<body onload="pageLoad()">
+
+  <!-- status -->
+  <div align='right' id='status'>
+    <font color='red'>NOT CONNECTED</font>
+  </div>
+
+  <!-- image -->
+  <!--<p>
+  <div align='center'> <img height=300 id='image_default' src="./img/diaglogo.jpg" alt="No image" /> </div>
+  </p>-->
+
+  <!-- text -->
+
+  <p>
+    
+    <div align='center' class='title' style="color:rgb(167, 49, 69); font-size: 70px; font-family: verdana; text-align: left;">Welcome to Pepper's tablet</div>
+  </p>
+
+  <p>
+    
+    <div align='center' class='title' style="color:rgb(167, 49, 69); font-size: 20px; font-family: verdana;
+    margin-left: 20%; text-align:left;">What would you like to do?</div>
+  </p>
+
+  <!-- buttons -->
+
+  <p>
+  <div align='center' id='buttons'>
+    <!-- input type="button" id="tictac" a= "https://playtictactoe.org/" value="TicTac" onclick="tictac()" -->
+  </div>
+  </p>
+
+  <div class="btn-group">
+    <button id="playGame" type="button" style="box-shadow: 0 12px 16px 0 rgba(105, 17, 17, 0.19), 0 17px 50px 0 rgba(105, 17, 17, 0.19); 
+    background-color:rgba(105, 17, 17, 0.19); border-radius: 12px; padding: 32px 16px; font-size: 24px; transition-duration: 0.4s;
+    text-align: center; margin-left: 10%; display: inline-block;" onclick="location.href='game.html'">
+      Play Game
+    </button>
+
+    <button id="readStory" type="button" style="box-shadow: 0 12px 16px 0 rgba(105, 17, 17, 0.19), 0 17px 50px 0 rgba(105, 17, 17, 0.19); 
+    background-color:rgba(105, 17, 17, 0.19); border-radius: 12px; padding: 32px 16px; font-size: 24px; transition-duration: 0.4s;
+    text-align: center; margin-left: 2%; display: inline-block;" onclick="location.href='story.html'">
+      Read Story
+    </button>
+    
+    <button id="playVideos" type="button" style="box-shadow: 0 12px 16px 0 rgba(105, 17, 17, 0.19), 0 17px 50px 0 rgba(105, 17, 17, 0.19); 
+    background-color:rgba(105, 17, 17, 0.19); border-radius: 12px; padding: 32px 16px; font-size: 24px; transition-duration: 0.4s;
+    text-align: center; margin-left: 2%; display: inline-block;" onclick="location.href='videos.html'">
+      Play Videos
+    </button>
+  
+  </div>
+
+
+  <!-- ****** SCRIPTS ****** -->
+
+  <script>
+
+    var connectedToWs = false;
+    var websocket = null;
+    var receivedCommand = false;
+
+    function wsrobot_init(ip, port) {
+        var url = "ws://"+ip+":"+port+"/modimwebsocketserver";
+        console.log(url);
+        websocket = new WebSocket(url);
+
+        websocket.onopen = function(){
+          console.log("connection received");
+          document.getElementById("status").innerHTML = "<font color='green'>OK</font>";
+          connectedToWs = true;            
+          hideInterface();
+        } 
+    
+        websocket.onclose = function(){
+          console.log("connection closed");
+          document.getElementById("status").innerHTML = "<font color='red'>NOT CONNECTED</font>";
+          connectedToWs = false;
+          hideInterface();
+        }
+    
+        websocket.onerror = function(){
+          console.log("!!!connection error!!!");
+          connectedToWs = false;
+          hideInterface();
+        }
+
+        websocket.onmessage = function(event) {
+          showInterface();
+          websocket.send("im.robot.say('Interface opened!')\n");
+        }
+    }
+  </script>
+
+  <script>
+
+    var ip = window.location.hostname;
+    if (ip == '')
+      ip = '127.0.0.1';
+    var port = 9100;
+
+    console.log("Trying connection...")
+    wsrobot_init(ip, port);
+
+    function hello() {
+      console.log("running interaction...");
+      codews.send("im.robot.say('hello')\n");
+    }
+
+    function tictac() {
+      console.log("running interaction...");
+      codews.send("im.robot.say('The game is starting')\n");
+    }
+
+    function hideInterface() {
+      document.getElementById("playGame").style.display = 'none';
+      document.getElementById("readStory").style.display = 'none';
+      document.getElementById("playVideos").style.display = 'none';
+    }
+
+    function showInterface() {
+      document.getElementById("playGame").style.display = 'block';
+      document.getElementById("readStory").style.display = 'block';
+      document.getElementById("playVideos").style.display = 'block';
+    }
+
+    function openGame() {
+      console.log("opening game");
+      document.getElementById("gameFrame").style.display = 'block';
+      document.getElementById("closeGame").style.display = 'block';
+    }
+
+    function readStory() {
+      console.log("opening story");
+      document.getElementById("storyFrame").style.display = 'block';
+      document.getElementById("closeStory").style.display = 'block';
+    }
+
+    function playVideos() {
+      console.log("opening videos");
+      document.getElementById("videosFrame").style.display = 'block';
+      document.getElementById("closeVideos").style.display = 'block';
+    }
+
+    function pageLoad() {
+      hideInterface();
+      document.getElementById("gameFrame").style.display = 'none';
+      document.getElementById("storyFrame").style.display = 'none';
+      document.getElementById("videosFrame").style.display = 'none';
+      document.getElementById("closeGame").style.display = 'none';
+      document.getElementById("closeStory").style.display = 'none';
+      document.getElementById("closeVideos").style.display = 'none';
+    }
+
+    function closeGame() {
+      console.log("Closing game frame...");
+      document.getElementById("gameFrame").style.display = 'none';
+      document.getElementById("closeGame").style.display = 'none';
+    }
+
+    function closeStory() {
+      document.getElementById("storyFrame").style.display = 'none';
+      document.getElementById("closeStory").style.display = 'none';
+    }
+
+    function closeVideos() {
+      document.getElementById("videosFrame").style.display = 'none';
+      document.getElementById("closeVideos").style.display = 'none';
+    }
+
+
+  </script>
+
+</body>
+
+</html>

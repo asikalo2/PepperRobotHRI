@@ -1,0 +1,44 @@
+topic: ~example-assistant()
+language: enu
+
+concept: (myname) ["My name is" "I'm" ]
+
+proposal: %name What's your name?
+	u1: ({~myname} _*) Hi $1 ^goto(age)
+
+proposal: %age Do you have less than 18 years?
+	u1: (no) Oh, I am sorry, I only play with kids! Bye!
+	u1: (yes) ^goto(question)
+
+proposal: %question Oh, that is great! Would you like to play for a bit?
+	u1: (yes) ^goto(question2)
+	u1: (no) ^goto(question3) 
+
+proposal: %moves What kind of moves would you like to see? Cats, dogs, or dance? Type "cats", "dogs" or "dance"
+	u1: (dogs) Oh, let's see some dogs moves!
+	u1: (cats) Oh, let's watch some cats moves!
+	u1: (dance) Oh, let's watch some dance moves!
+
+proposal: %question2 Ok, we need to use my tablet so we could play. Is that fine with you?
+	u1: (yes) Let's turn on the tablet!
+	u1: (no) Are you sure about that?
+		u2: (yes) Bye!
+		u2: (no) You're confusing. ^goto(question)
+
+proposal: %question3 Ok, Let's start with my tablet. Tell me "stop" when you finished with the tablet
+	u1: (stop) Ok, Do you want to do something else?
+		u2: (yes) ^goto(question4)
+		u2: (no) ^goto(questionstory)
+
+proposal: %question4 I understand! Would you like to watch me make different moves?
+	u1: (yes) ^goto(moves)
+	u1: (no) Do you want to leave?
+		u2: (yes) Bye!
+		u2: (no) ^goto(question)
+
+proposal: %questionstory Would you like me to read a story?
+	u1: (yes) Ok.
+	u1: (no) Bye!
+
+u:(["hi" "hello"] {_*}) ^goto(name)
+

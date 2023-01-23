@@ -1,0 +1,11 @@
+BUTTONS
+yes
+<*,*,it,*>: Si
+<*,*,*,*>:  Yes
+no
+<*,*,it,*>: No
+<*,*,*,*>:  No
+exit
+<*,*,it,*>: Indietro
+<*,*,*,*>:  Exit
+----

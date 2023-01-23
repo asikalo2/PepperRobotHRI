@@ -1,0 +1,11 @@
+topic: ~example-assistant2()
+language: enu
+
+concept: (myname) [""]
+
+proposal: %first How are you feeling? Are you sad or happy?
+	u1: (happy) You are happy! Nice to hear. Let me read you some funny story so we can laugh together. 
+	u1: (sad) Oh, you are sad. Let me read you one happy story to cheer you up. 
+
+
+u:(["ok" "fine"] {_*}) ^goto(first)
